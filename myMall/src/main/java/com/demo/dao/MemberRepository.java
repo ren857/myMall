@@ -8,11 +8,11 @@ import com.demo.model.Member;
 public interface MemberRepository	extends JpaRepository<Member,Integer> {
 
 
-	@Query(value="select * from member where username=?1",nativeQuery=true)
-	Member queryUsername(String username);
+	@Query(value="select * from member where loginusername=?1",nativeQuery=true)
+	Member queryUsername(String loginusername);
 	
 	
-	@Query(value="select * from member where username=?1 and password=?2",nativeQuery=true)
-	Member queryMember(String username,String password);
+	@Query(value="select * from member where loginusername=?1 and loginpassword=?2",nativeQuery=true)
+	Member queryMember(String loginusername,String loginpassword);
 	
 }

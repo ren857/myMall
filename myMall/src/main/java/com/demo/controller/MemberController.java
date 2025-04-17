@@ -36,16 +36,17 @@ public class MemberController {
 	@RequestMapping("/login")
 	public ModelAndView login(@RequestBody Member m) {
 		System.out.println(m);
+		System.out.println(m.getLoginpassword()+"  "+m.getLoginusername());
 		Member l = mr.queryMember(m.getLoginusername(),m.getLoginpassword());
 		System.out.println(l);
 		if(l!=null) {
 			session.setAttribute("M", l);
-			ModelAndView mav = new ModelAndView("index");
+			ModelAndView mav = new ModelAndView("redirect:/index.html");
 			return mav;
 		}
 		else
 		{
-			return new ModelAndView("redirct:errorLogin");
+			return new ModelAndView("redirect:/index.html");
 		}
 	}
 

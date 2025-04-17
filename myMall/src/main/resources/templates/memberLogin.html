@@ -87,10 +87,10 @@
     <h2>登入</h2>
     <form action="/login" method="post">
       <label for="username">帳號 ※</label>
-      <input type="username" id="username" required>
+      <input type="text" id="loginusername" name="loginusername" required>
 
       <label for="password">密碼 ※</label>
-      <input type="password" id="password" required>
+      <input type="password" id="loginpassword" name="loginpassword" required>
 
       <div class="checkbox-container">
         <input type="checkbox" id="showPassword">
@@ -98,14 +98,38 @@
       </div>
       <script>
   document.getElementById("showPassword").addEventListener("change", function () {
-    const pwField = document.getElementById("password");
+    const pwField = document.getElementById("loginpassword");
     pwField.type = this.checked ? "text" : "password";
   });
 </script>
-      
 		
-      <button type=submit  class="btn">登入</button>
+      <button type="submit"  class="btn">登入</button>
     </form>
+    <script>
+  $("form").on("submit", function(e) {
+    e.preventDefault(); // 不讓表單自己送出
+
+    const data = {
+    		loginusername: $("#loginusername").val(),
+    		loginpassword: $("#loginpassword").val()
+    };
+
+    $.ajax({
+      url: "/login",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      success: function(response) {
+        // 成功登入後導向首頁
+        window.location.href = "/index.html";
+      },
+      error: function() {
+        window.location.href = "/errorLogin";
+      }
+    });
+  });
+</script>
+    
   </div>
 
   <div class="register-box">
