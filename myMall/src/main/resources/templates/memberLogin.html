@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>新增會員</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<style>
+.menu-space {
+	width: 20px; /* 調整適當的間距寬度 */
+	display: inline-block;
+}
+</style>
+</head>
+ <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      padding: 50px;
+    }
+    .login-box, .register-box {
+      width: 40%;
+      padding: 20px;
+    }
+    h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+    }
+    input[type="username"], input[type="password"],input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #e7efff;
+      border: none;
+      border-radius: 3px;
+    }
+    .checkbox-container {
+      margin-top: 10px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      background: black;
+      color: white;
+      padding: 10px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .register-box {
+      border-left: 1px solid #ddd;
+    }
+    .footer {
+      margin-top: 50px;
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+<a href="index.html">
+	<img src="/bg/bg001.png" style="height:60px;margin-left: 180px;">
+</a>
+
+<div class="container">
+  <div class="login-box">
+    <h2>登入</h2>
+    <form action="/login" method="post">
+      <label for="username">帳號 ※</label>
+      <input type="username" id="username" required>
+
+      <label for="password">密碼 ※</label>
+      <input type="password" id="password" required>
+
+      <div class="checkbox-container">
+        <input type="checkbox" id="showPassword">
+        <label for="showPassword">顯示輸入密碼</label>
+      </div>
+      <script>
+  document.getElementById("showPassword").addEventListener("change", function () {
+    const pwField = document.getElementById("password");
+    pwField.type = this.checked ? "text" : "password";
+  });
+</script>
+      
+		
+      <button type=submit  class="btn">登入</button>
+    </form>
+  </div>
+
+  <div class="register-box">
+    <h2>加入myMall會員</h2>
+    <p>要訂購商品，或是要使用商品評論時，請先註冊會員。</p>
+    <p>點擊「會員註冊」後開始進行註冊。</p>
+    <button class="btn">新用戶註冊</button>
+  </div>
+</div>
+
+<div class="footer">
+  Copyright © G.U. CO., Ltd. All rights reserved.
+</div>
+
+</body>
+</html>
