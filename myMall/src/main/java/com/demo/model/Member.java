@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
   		public class Member {
 			@Id
 			Integer mid;
+			String name;
 			String loginusername;
 			String loginpassword;
 			String phone;
