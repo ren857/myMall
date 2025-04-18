@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>商品詳情</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    .product-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 40px;
+    }
+    img {
+      max-width: 300px;
+      border-radius: 8px;
+    }
+    .details {
+      max-width: 400px;
+    }
+    h1 {
+      color: #333;
+    }
+    .price {
+      font-size: 24px;
+      color: #d9534f;
+    }
+    .size {
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="product-container">
+    <img id="product-image" src="" alt="商品圖片">
+    <div class="details">
+      <h1 id="product-name">載入中...</h1>
+      <p class="price" id="product-price"></p>
+      <p class="size" id="product-size"></p>
+    </div>
+  </div>
+
+  <script>
+    // 從網址取得 pid，例如 http://localhost:8080/product-detail.html?pid=3
+    const urlParams = new URLSearchParams(window.location.search);
+    const pid = urlParams.get('pid');
+
+    if (pid) {
+      $.get(`/api/products/${pid}`, function(product) {
+        $("#product-name").text(product.pname);
+        $("#product-image").attr("src", "/image/" + product.image);
+        $("#product-price").text("價格：NT$" + product.price);
+        $("#product-size").text("尺寸：" + product.size);
+      }).fail(function() {
+        $("#product-name").text("找不到商品");
+        $("#product-price").text("");
+        $("#product-size").text("");
+        $("#product-image").hide();
+      });
+    } else {
+      $("#product-name").text("未提供商品 pid");
+      $("#product-image").hide();
+    }
+  </script>
+
+</body>
+</html>

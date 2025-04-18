@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -66,5 +67,37 @@ public class MemberController {
         session.invalidate();
         response.sendRedirect("/index.html");
     }
+    @PostMapping("/addMember")
+    @ResponseBody
+	public String addMember(@RequestBody Member m)
+	{	
+		System.out.println(m);
+		Member l = mr.queryUsername(m.getLoginusername());
+		if(l !=null)
+		{
+			return "帳號重複請重新註冊";
+		}
+		else
+		{
+			mr.save(m);
+			return "success";
+		}
+	}
+    @RequestMapping("errorLogin")
+	public String errorLogin()
+	{		
+		return "帳號密碼錯誤請重新輸入,若無帳號請先註冊";
+	}
+	
+	@RequestMapping("addMemberError")
+	public String addMemberError()
+	{		
+		return "帳號重複請重新註冊";
+	}
+	
+	@RequestMapping("updatepasswordError")
+	public String updatepasswordError() {
+		return "無此帳號請重新輸入";
+	}
 }
 
