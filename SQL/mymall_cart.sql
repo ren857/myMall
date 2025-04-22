@@ -24,8 +24,12 @@ DROP TABLE IF EXISTS `cart`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `cart` (
   `mid` int NOT NULL,
-  `pid` int DEFAULT NULL,
-  PRIMARY KEY (`mid`)
+  `pid` int NOT NULL,
+  `quantity` int NOT NULL,
+  PRIMARY KEY (`mid`,`pid`),
+  KEY `pid_idx` (`pid`),
+  CONSTRAINT `mid` FOREIGN KEY (`mid`) REFERENCES `member` (`mid`),
+  CONSTRAINT `pid` FOREIGN KEY (`pid`) REFERENCES `product` (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -35,6 +39,7 @@ CREATE TABLE `cart` (
 
 LOCK TABLES `cart` WRITE;
 /*!40000 ALTER TABLE `cart` DISABLE KEYS */;
+INSERT INTO `cart` VALUES (1,3,6),(3,3,3);
 /*!40000 ALTER TABLE `cart` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -47,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-18 16:47:22
+-- Dump completed on 2025-04-22 14:35:02

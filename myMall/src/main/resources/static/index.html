@@ -1,74 +1,128 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <title>myMall</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<meta charset="UTF-8">
+<title>myMall</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<!--script src="/js/bootstrap.min.js"></script-->  
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background-image: url('/bg/bg002.png');
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-      font-family: Arial, sans-serif;
-    }
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<!--link rel="stylesheet" href="/css/bootstrap.min.css"-->
 
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 40px;
-      background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
-    }
+<style>
+.carousel-inner img {
+	height: 500px !important;
+	width: 500px !important;
+	margin: 0 auto;
+}
 
-    .logo-box {
-      display: flex;
-      align-items: center;
-    }
+body {
+	margin: 0;
+	height: 100vh;
+	background-image: url('/bg/bg002.png');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	font-family: Arial, sans-serif;
+}
 
-    .logo-box img {
-      height: 40px;
-      margin-right: 10px;
-    }
+.top-bar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 40px;
+	background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
+}
 
-    .nav-links a {
-      margin-left: 20px;
-      color: #333;
-      text-decoration: none;
-      font-weight: bold;
-    }
+.logo-box {
+	display: flex;
+	align-items: center;
+}
 
-    .nav-links a:hover {
-      color: #007bff;
-    }
-  </style>
+.logo-box img {
+	height: 40px;
+	margin-right: 10px;
+}
+
+.nav-links a {
+	margin-left: 20px;
+	color: #333;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.nav-links a:hover {
+	color: #007bff;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="top-bar">
-    <div class="logo-box">
-      <a href="index.html">
-        <img src="/bg/bg001.png" alt="Logo">
-      </a>
-      <span>myMall</span>
-    </div>
-    <div class="nav-links">
-  <a href="/memberLogin" id="loginLink">登入</a>
-  <span id="welcomeUser" style="margin-left: 20px;"></span>
-  <a href="#" id="logoutLink" style="display:none;">登出</a>
-  <a href="#">購物車</a>
-</div>
-</div>
+	<div class="top-bar">
+		<div class="logo-box">
+			<a href="/index.html"> <img src="/bg/bg001.png" alt="Logo">
+			</a> <span>myMall</span>
+		</div>
+		<div class="nav-links">
+			<a href="/memberLogin" id="loginLink">登入</a> <span id="welcomeUser"
+				style="margin-left: 20px;"></span> <a href="#" id="logoutLink"
+				style="display: none;">登出</a> <a href="/api/cartPage">購物車</a>
+		</div>
+	</div>
+	<div class="container">
 
+		<div id="ExampleIndicators" class="carousel slide"
+			data-ride="carousel">
+			<ol class="carousel-indicators">
+				<li data-target="#ExampleIndicators" data-slide-to="0"
+					class="active"></li>
+				<li data-target="#ExampleIndicators" data-slide-to="1"></li>
+				<li data-target="#ExampleIndicators" data-slide-to="2"></li>
+				<li data-target="#ExampleIndicators" data-slide-to="3"></li>
+			</ol>
 
-<script>
+			<div class="carousel-inner mt-5"">
+				<div class="carousel-item active" data-interval="3000">
+					<div class="carousel-caption d-none d-md-block">
+						<h5>First slide label</h5>
+					</div>
+					<img src="./image/P001.jpg" class="d-block w-100" alt="banner 1" />
+				</div>
+				<div class="carousel-item" data-interval="3000">
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Second slide label</h5>
+					</div>
+					<img src="./image/M001.jpg" class="d-block w-100" alt="banner 2" />
+				</div>
+				<div class="carousel-item" data-interval="3000">
+					<div class="carousel-caption d-none d-md-block">
+						<h5>Third slide label</h5>
+					</div>
+					<img src="./image/D001.jpg" class="d-block w-100" alt="banner 3" />
+				</div>
+			</div>
+			<a class="carousel-control-prev" href="#ExampleIndicators"
+				role="button" data-slide="prev"> <span
+				class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+				class="sr-only">Previous</span>
+			</a> <a class="carousel-control-next" href="#ExampleIndicators"
+				role="button" data-slide="next"> <span
+				class="carousel-control-next-icon" aria-hidden="true"></span> <span
+				class="sr-only">Next</span>
+			</a>
+		</div>
+		<div class="text-center mt-4">
+    <a href="/api/products/shop" class="btn btn-dark btn-lg">開始購物</a>
+  </div>
+	</div>
+	<script>
 
 $(document).ready(function() {
 	
@@ -81,7 +135,6 @@ $(document).ready(function() {
     });
 
     $("#logoutLink").click(function(e) {			// 當使用者點擊「登出」連結時執行
-      e.preventDefault();							// 取消原本連結的預設行為（例如跳頁）
       $.get("/logout", function() {					// 發送 GET 請求到 /logout，請求登出
         window.location.href = "/index.html";		// 登出成功後，重新導向回首頁（index.html）
       });

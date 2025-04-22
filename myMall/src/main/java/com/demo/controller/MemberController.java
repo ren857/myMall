@@ -46,19 +46,20 @@ public class MemberController {
         Member l = mr.queryMember(m.getLoginusername(), m.getLoginpassword());
         if (l != null) {
             session.setAttribute("M", l);
+            session.setAttribute("mid", l.getMid());
             return ResponseEntity.ok(l); // 回傳會員資料
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("帳密錯誤");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("帳號密碼錯誤，請重新輸入");
         }
     }
 
     @GetMapping("/currentUser")
     public ResponseEntity<?> getCurrentUser(HttpSession session) {
-        Member m = (Member) session.getAttribute("M");
+        Member m = (Member) session.getAttribute("M");      
         if (m != null) {
-            return ResponseEntity.ok(Map.of("name", m.getName())); // 回傳登入帳號名稱
+            return ResponseEntity.ok(Map.of("name", m.getName(),"mid", m.getMid())); // 回傳登入帳號名稱
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        	return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("尚未登入");  // 返回未登入的錯誤訊息
         }
     }
 
@@ -69,32 +70,20 @@ public class MemberController {
     }
     @PostMapping("/addMember")
     @ResponseBody
-	public String addMember(@RequestBody Member m)
+	public ResponseEntity<String> addMember(@RequestBody Member m)
 	{	
 		System.out.println(m);
 		Member l = mr.queryUsername(m.getLoginusername());
 		if(l !=null)
 		{
-			return "帳號重複請重新註冊";
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("帳號重複，請重新註冊！");
 		}
 		else
 		{
 			mr.save(m);
-			return "success";
+			return ResponseEntity.ok("註冊成功！");
 		}
-	}
-    @RequestMapping("errorLogin")
-	public String errorLogin()
-	{		
-		return "帳號密碼錯誤請重新輸入,若無帳號請先註冊";
-	}
-	
-	@RequestMapping("addMemberError")
-	public String addMemberError()
-	{		
-		return "帳號重複請重新註冊";
-	}
-	
+	}	
 	@RequestMapping("updatepasswordError")
 	public String updatepasswordError() {
 		return "無此帳號請重新輸入";

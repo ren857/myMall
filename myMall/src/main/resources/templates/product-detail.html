@@ -1,50 +1,119 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <title>商品詳情</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-    }
-    .product-container {
-      display: flex;
-      align-items: flex-start;
-      gap: 40px;
-    }
-    img {
-      max-width: 300px;
-      border-radius: 8px;
-    }
-    .details {
-      max-width: 400px;
-    }
-    h1 {
-      color: #333;
-    }
-    .price {
-      font-size: 24px;
-      color: #d9534f;
-    }
-    .size {
-      font-size: 18px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>商品詳情</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<style>
+/*body {
+	font-family: Arial, sans-serif;
+	margin: 40px;
+}*/
+.product-container {
+	display: flex;
+	align-items: flex-start;
+	gap: 40px;
+}
+
+img {
+	max-width: 300px;
+	border-radius: 8px;
+}
+
+.details {
+	max-width: 400px;
+}
+
+h1 {
+	color: #333;
+}
+
+.price {
+	font-size: 24px;
+	color: #d9534f;
+}
+
+.size {
+	font-size: 18px;
+}
+
+.btn {
+	display: block;
+	width: 100%;
+	background: black;
+	color: white;
+	padding: 10px;
+	margin-top: 20px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+.top-bar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 40px;
+	background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
+}
+
+.logo-box img {
+	height: 40px;
+	margin-right: 10px;
+}
+
+.logo-box {
+	display: flex;
+	align-items: center;
+}
+
+.nav-links a {
+	margin-left: 20px;
+	color: #333;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.nav-links a:hover {
+	color: #007bff;
+}
+</style>
 </head>
 <body>
+	<div class="top-bar">
+		<div class="logo-box">
+			<a href="/index.html"> <img src="/bg/bg001.png" alt="Logo">
+			</a> <span>myMall</span>
+		</div>
+		<div class="nav-links">
+			<a href="/memberLogin" id="loginLink">登入</a> <span id="welcomeUser"
+				style="margin-left: 20px;"></span> <a href="#" id="logoutLink"
+				style="display: none;">登出</a> <a href="/api/cart">購物車</a>
+		</div>
+	</div>
 
-  <div class="product-container">
-    <img id="product-image" src="" alt="商品圖片">
-    <div class="details">
-      <h1 id="product-name">載入中...</h1>
-      <p class="price" id="product-price"></p>
-      <p class="size" id="product-size"></p>
-    </div>
-  </div>
+	<div class="product-container">
+		<img id="product-image" src="" alt="商品圖片">
+		<div class="details">
+			<h1 id="product-name">載入中...</h1>
+			<p class="price" id="product-price"></p>
+			<p class="size" id="product-size"></p>
+		</div>
+	</div>
+	<form id="addm">
+		<button id=msg type="submit" class="btn">加入購物車</button>
+	</form>
 
-  <script>
+	<script>
     // 從網址取得 pid，例如 http://localhost:8080/product-detail.html?pid=3
     const urlParams = new URLSearchParams(window.location.search);
     const pid = urlParams.get('pid');
@@ -65,7 +134,60 @@
       $("#product-name").text("未提供商品 pid");
       $("#product-image").hide();
     }
+    function changeQuantity(delta) {
+    	const quantityInput = document.getElementById('quantity');
+    	let currentQuantity = parseInt(quantityInput.value);
+    	if (currentQuantity + delta >= 1) {
+    		quantityInput.value = currentQuantity + delta;
+    	}
+    }
+    
   </script>
 
+	<script>
+	$(document).ready(function() {
+		
+	    $.get("/currentUser", function(user) {            // 發送 GET 請求到 /currentUser，取得目前登入的使用者資料（如果有登入的話）
+	      if (user && user.name) {							// 檢查回傳的 user 是否存在，且裡面有 name 欄位（代表已登入）
+	        $("#loginLink").hide();                              // 隱藏「登入」按鈕
+	        $("#welcomeUser").text("歡迎您：" + user.name);		// 在頁面上顯示「歡迎您：使用者名稱」
+	        $("#logoutLink").show();								// 顯示「登出」按鈕						
+	      }
+	    });
+	    $("#logoutLink").click(function(e) {			// 當使用者點擊「登出」連結時執行
+	      $.get("/logout", function() {	
+	        window.location.href = "/index.html";		// 登出成功後，重新導向回首頁（index.html）
+	      });
+	});
+	    
+	$("#msg").click(function(e) {
+		  e.preventDefault();// 防止表單預設送出
+		  
+		  $.get("/currentUser", function(user) {
+		        if (!user || !user.mid) {
+		            alert("請先登入！");
+		            return;
+		        }
+
+	  const mid = user.mid;
+	  const pid = new URLSearchParams(window.location.search).get('pid');
+
+	  fetch(`http://localhost:8080/api/add?mid=${mid}&pid=${pid}&quantity=${quantity}`, {
+	    method: "POST"
+	  })
+	  .then(res => res.text())
+	  .then(msg => {
+	    alert(msg);
+	    //window.location.href = "/api/products/shop";
+	  }).catch(error => {
+          console.error('加入購物車錯誤:', error);
+      });
+	});
+  });    
+});
+
+
+
+</script>
 </body>
 </html>

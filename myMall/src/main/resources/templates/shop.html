@@ -7,13 +7,13 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="./js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="./css/bootstrap.min.css">
+<script src="/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
 <style>
-.col-md-4{
+.col-md-4 {
 	cursor: pointer;
-	}
+}
 
 .top-bar {
 	display: flex;
@@ -27,10 +27,11 @@
 	height: 40px;
 	margin-right: 10px;
 }
-  .logo-box {
-      display: flex;
-      align-items: center;
-    }
+
+.logo-box {
+	display: flex;
+	align-items: center;
+}
 
 .nav-links a {
 	margin-left: 20px;
@@ -46,50 +47,49 @@
 <body>
 	<div class="top-bar">
 		<div class="logo-box">
-			<a href="index.html"> <img src="/bg/bg001.png" alt="Logo">
+			<a href="/index.html"> <img src="/bg/bg001.png" alt="Logo">
 			</a> <span>myMall</span>
 		</div>
 		<div class="nav-links">
 			<a href="/memberLogin" id="loginLink">登入</a> <span id="welcomeUser"
 				style="margin-left: 20px;"></span> <a href="#" id="logoutLink"
-				style="display: none;">登出</a> <a href="#">購物車</a>
+				style="display: none;">登出</a> <a href="/api/cart">購物車</a>
 		</div>
-		</div>
-		<div class="container">
-			<div class="row">
-				<div class="col-md-4" id="p01">
-					<div class="card">
-						<img class="card-img-top" src="/images/D001.jpg" alt="Card image">
-						<div class="card-body">
-							<h4 class="card-title">John Doe</h4>
-							<p class="card-text">Some example text.</p>
-							<a href="#" class="btn btn-primary">See Profile</a>
-						</div>
-					</div>
-
-				</div>
-				<div class="col-md-4" id="p02">
-					<div class="card">
-						<img class="card-img-top" src="/image/M001.jpg" alt="Card image">
-						<div class="card-body">
-							<h4 class="card-title">John Doe</h4>
-							<p class="card-text">Some example text.</p>
-							<a href="#" class="btn btn-primary">See Profile</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4" id="p03">
-					<div class="card">
-						<img class="card-img-top" src="/image/P001.jpg" alt="Card image">
-						<div class="card-body">
-							<h4 class="card-title">John Doe</h4>
-							<p class="card-text">Some example text.</p>
-							<a href="#" class="btn btn-primary">See Profile</a>
-						</div>
-					</div>
+	</div>
+	<div class="container">
+		<div class="row">
+		<div class="col-md-4" id="p01">
+			<div class="card" data-pid="9">
+				<img class="card-img-top" src="/image/D001.jpg" alt="Card image">
+				<div class="card-body">
+					<h4 class="card-title">John Doe</h4>
+					<p class="card-text">Some example text.</p>
+					<a href="#" class="btn btn-primary">See Profile</a>
 				</div>
 			</div>
 		</div>
+			<div class="col-md-4" id="p02">
+			<div class="card" data-pid="3">
+				<img class="card-img-top" src="/image/M001.jpg" alt="Card image">
+				<div class="card-body">
+					<h4 class="card-title">John Doe</h4>
+					<p class="card-text">Some example text.</p>
+					<a href="#" class="btn btn-primary">See Profile</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4" id="p03">
+			<div class="card" data-pid="6">
+				<img class="card-img-top" src="/image/P001.jpg" alt="Card image">
+				<div class="card-body">
+					<h4 class="card-title">John Doe</h4>
+					<p class="card-text">Some example text.</p>
+					<a href="#" class="btn btn-primary">See Profile</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
 </body>
 <script>
 
@@ -110,14 +110,17 @@ $(document).ready(function() {
       });
     });
  // 點擊每個商品卡片，導向對應的頁面
-    $("#p01").click(function() {
-      window.location.href = "productD001.html"; // 替換成你要導向的頁面
+    $(".card").click(function() {
+    	const pid = $(this).data("pid");
+   	  window.location.href = `/api/products/detail?pid=${pid}`;
     });
-    $("#p02").click(function() {
-      window.location.href = "productM001.html";
+    $(".card").click(function() {
+    	const pid = $(this).data("pid");
+    	window.location.href = `/api/products/detail?pid=${pid}`;
     });
-    $("#p03").click(function() {
-      window.location.href = "productP001.html";
+    $(".card").click(function() {
+    	const pid = $(this).data("pid");
+      window.location.href = `/api/products/detail?pid=${pid}`;
     });
 });
 </script>

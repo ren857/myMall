@@ -1,8 +1,11 @@
 package com.demo.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.demo.dao.ProductRepository;
+import com.demo.model.Member;
 import com.demo.model.Product;
 import com.demo.service.ProductService;
 
@@ -22,6 +26,8 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 public class ProductController {
 
+    private final ProductRepository productRepository;
+
 	@Autowired
 	private HttpServletResponse response;
 	
@@ -33,6 +39,10 @@ public class ProductController {
 	
 	@Autowired
 	private ProductService productservice;
+
+    ProductController(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 	
 	@RequestMapping("/shop")
 	public ModelAndView shop()
@@ -54,4 +64,5 @@ public class ProductController {
     public List<Product> getAllProducts() {
         return productservice.getAllProducts();
     }
+    
 }
