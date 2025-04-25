@@ -7,12 +7,9 @@ import com.demo.model.Member;
 
 public interface MemberRepository	extends JpaRepository<Member,Integer> {
 
-
-	@Query(value="select * from member where loginusername=?1",nativeQuery=true)
+	@Query("SELECT m FROM Member m WHERE m.loginusername = ?1")
 	Member queryUsername(String loginusername);
-	
-	
-	@Query(value="select * from member where loginusername=?1 and loginpassword=?2",nativeQuery=true)
-	Member queryMember(String loginusername,String loginpassword);
-	
+	@Query("SELECT m FROM Member m WHERE m.loginusername = ?1 AND m.loginpassword = ?2")
+	Member queryMember(String loginusername, String loginpassword);
+
 }

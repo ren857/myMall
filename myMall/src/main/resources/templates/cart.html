@@ -4,70 +4,31 @@
   <meta charset="UTF-8">
   <title>購物車</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
   
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 30px;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 12px;
-      text-align: center;
-    }
-
-    img {
-      width: 100px;
-    }
-
-    .quantity-controls {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .total {
-      text-align: right;
-      margin-top: 20px;
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-
-    .btn {
-      padding: 6px 12px;
-      background-color: #444;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .btn:hover {
-      background-color: #666;
-    }
-
-    td {
-      vertical-align: middle;  /* 確保按鈕和文本垂直居中 */
-    }
-  </style>
+ <link rel="stylesheet" href="/css/cart.css"> <!-- 引入外部 CSS -->
+ 
 </head>
+<style>
+#total-money{
+	color:red;
+}</style>
 <body>
 <div class="top-bar">
-		<div class="logo-box">
-			<a href="/index.html"> <img src="/bg/bg001.png" alt="Logo">
-			</a> <span>myMall</span>
-		</div>
-		<div class="nav-links">
-			<a href="/memberLogin" id="loginLink">登入</a> <span id="welcomeUser"
-				style="margin-left: 20px;"></span> <a href="#" id="logoutLink"
-				style="display: none;">登出</a> <a href="/api/cart">購物車</a>
-		</div>
-	</div>
+    <div class="logo-box">
+      <a href="/index.html"> <img src="/bg/bg001.png" alt="Logo"> </a>
+      <span>myMall</span>
+    </div>
+    <div class="nav-links">
+      <a href="/memberLogin" id="loginLink">登入</a>
+      <span id="welcomeUser" style="margin-left: 20px;"></span>
+      <a href="#" id="logoutLink" style="display: none;">登出</a>
+      <!--a href="/api/cartPage">購物車</a-->
+    </div>
+  </div>
+
+<div class="container">
 
 <h2>購物車</h2>
 
@@ -83,131 +44,20 @@
     </tr>
   </thead>
   <tbody id="cart-body">
-    <!-- 商品列動態加入 -->
-  </tbody>
+    <!-- 商品列表将在这里渲染 -->
+</tbody>
+ 
 </table>
 
 <div class="total" id="total-amount">
-  總金額：NT$0
+  總金額：<span id="total-money">NT$0</span>
 </div>
 
-<script>
-  let cartItems = [];  // 確保 cartItems 是全局變數
-
-  const cartBody = document.getElementById("cart-body");
-  const totalAmount = document.getElementById("total-amount");
-
-  // 確保後端返回的數據能夠正確渲染
-  fetch("http://localhost:8080/api/cart")  // 確保後端 port 是 8080
-  .then(response => response.json())
-  .then(cartData => {
-    cartItems = cartData;  // 保存數據到 cartItems 變數
-    if (cartItems.length === 0) {
-      alert("購物車內沒有商品！");
-    }
-    renderCart(cartItems); // 調用渲染函數來顯示數據，並將 cartItems 傳遞給渲染函數
-  })
-  .catch(error => {
-    console.error("獲取購物車資料出錯:", error);
-    alert("獲取購物車資料失敗");
-  });
-
-  // 渲染購物車的函數
-  function renderCart(cartItems) {
-    cartBody.innerHTML = ""; // 清空原來的內容
-    let total = 0;
-
-    // 遍歷購物車商品
-    cartItems.forEach((item, index) => {
-      const subtotal = item.price * item.quantity; // 小計
-      total += subtotal;
-
-      // 創建顯示商品的一行
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>
-          <img src="/images/${item.image}" alt="商品圖片">
-          <p>${item.pname}</p>
-        </td>
-        <td>尺寸：${item.size}</td>
-        <td>NT$${item.price}</td>
-        <td>
-          <div class="quantity-controls">
-            <button class="btn" onclick="changeQuantity(${index}, -1)">-</button>
-            <span id="quantity-${index}">${item.quantity}</span>  <!-- 這裡展示數量 -->
-            <button class="btn" onclick="changeQuantity(${index}, 1)">+</button>
-          </div>
-        </td>
-        <td>NT$${subtotal}</td>
-        <td>
-          <button class="btn" onclick="removeItem(${index})">刪除</button>
-        </td>
-      `;
-      cartBody.appendChild(row);
-    });
-
-    totalAmount.innerText = `總金額：NT$${total}`;
-  }
-
-  // 修改商品數量的函數
-  function changeQuantity(index, delta) {
-    cartItems[index].quantity += delta;  // 更新數量
-    if (cartItems[index].quantity <= 0) cartItems[index].quantity = 1; // 防止數量小於1
-
-    // 更新顯示的數量
-    document.getElementById(`quantity-${index}`).innerText = cartItems[index].quantity;
-    renderCart(cartItems);  // 更新渲染
-
-    // 確保 user 已登入
-    $.get("/currentUser", function(user) {
-        if (!user || !user.mid) {  // 檢查是否有用戶資料或用戶ID
-            alert("請先登入！");
-            return;  // 未登入時中斷操作
-        }
-
-        // 若用戶已登入，執行後續操作
-        const mid = user.mid;
-        const pid = cartItems[index].pid;  // 確保 pid 在 cartItems 中有正確設置
-        const quantity = cartItems[index].quantity;
-        console.log("Sending PID:", cartItems[index].pid);
-        console.log("Sending PID:", pid);  // 這裡可以確認 pid 是否正確
-
-        fetch(`http://localhost:8080/api/updateQuantity?mid=${mid}&pid=${pid}&quantity=${quantity}`, {
-            method: "POST"
-        })
-        .then(res => res.text())
-        .then(msg => {
-            alert(msg);  // 顯示後端返回的消息
-        })
-        .catch(error => {
-            console.error("加入購物車錯誤:", error);
-            alert("加入購物車失敗");
-        });
-    });
-}
-
-  // 刪除商品
-  function removeItem(index) {
-    cartItems.splice(index, 1); // 刪除指定索引的商品
-    renderCart(cartItems); // 更新渲染
-
-    // 同步更新後端
-    const mid = cartItems[index].mid;
-    const pid = cartItems[index].pid;
-
-    fetch(`http://localhost:8080/api/remove?mid=${mid}&pid=${pid}`, {
-      method: "DELETE"
-    })
-    .then(res => res.text())
-    .then(msg => {
-      alert(msg);  // 顯示刪除後返回的消息
-    }) 
-    .catch(error => {
-      console.error("刪除購物車錯誤:", error);
-      alert("刪除購物車失敗");
-    });
-  }
-</script>
-
+<form id="addToCartForm">
+    <button type="submit" class="btn">修改訂單</button>
+</form>
+</div>
 </body>
+<script src="/js/cart.js"></script>
+
 </html>

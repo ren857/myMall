@@ -25,4 +25,22 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
+
+	@Override
+	public List<Product> findProductByPname(String pname) {
+		
+		return productRepository.findProductByPname(pname);
+	}
+
+	@Override
+	public List<String> getProductListByGruopName() {
+		// TODO Auto-generated method stub
+		return productRepository.getProductListByGroupName();
+	}
+
+	@Override
+	public List<Integer> getPidByPname(String pname) {
+		
+		return productRepository.getPidByPname(pname);
+	}
 }

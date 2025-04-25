@@ -7,43 +7,13 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="/css/shop.css">
 </head>
-<style>
-.col-md-4 {
-	cursor: pointer;
-}
-
-.top-bar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 10px 40px;
-	background-color: rgba(255, 255, 255, 0.8); /* 半透明背景 */
-}
-
-.logo-box img {
-	height: 40px;
-	margin-right: 10px;
-}
-
-.logo-box {
-	display: flex;
-	align-items: center;
-}
-
-.nav-links a {
-	margin-left: 20px;
-	color: #333;
-	text-decoration: none;
-	font-weight: bold;
-}
-
-.nav-links a:hover {
-	color: #007bff;
-}
-</style>
 <body>
 	<div class="top-bar">
 		<div class="logo-box">
@@ -53,75 +23,14 @@
 		<div class="nav-links">
 			<a href="/memberLogin" id="loginLink">登入</a> <span id="welcomeUser"
 				style="margin-left: 20px;"></span> <a href="#" id="logoutLink"
-				style="display: none;">登出</a> <a href="/api/cart">購物車</a>
+				style="display: none;">登出</a> <a href="/api/cartPage">購物車</a>
 		</div>
 	</div>
 	<div class="container">
-		<div class="row">
-		<div class="col-md-4" id="p01">
-			<div class="card" data-pid="9">
-				<img class="card-img-top" src="/image/D001.jpg" alt="Card image">
-				<div class="card-body">
-					<h4 class="card-title">John Doe</h4>
-					<p class="card-text">Some example text.</p>
-					<a href="#" class="btn btn-primary">See Profile</a>
-				</div>
-			</div>
+		<div class="row" id="card-row">
 		</div>
-			<div class="col-md-4" id="p02">
-			<div class="card" data-pid="3">
-				<img class="card-img-top" src="/image/M001.jpg" alt="Card image">
-				<div class="card-body">
-					<h4 class="card-title">John Doe</h4>
-					<p class="card-text">Some example text.</p>
-					<a href="#" class="btn btn-primary">See Profile</a>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-4" id="p03">
-			<div class="card" data-pid="6">
-				<img class="card-img-top" src="/image/P001.jpg" alt="Card image">
-				<div class="card-body">
-					<h4 class="card-title">John Doe</h4>
-					<p class="card-text">Some example text.</p>
-					<a href="#" class="btn btn-primary">See Profile</a>
-				</div>
-			</div>
-		</div>
-	</div>
 	</div>
 </body>
-<script>
+<script src="/js/shop.js"></script>
 
-$(document).ready(function() {
-	
-    $.get("/currentUser", function(user) {            // 發送 GET 請求到 /currentUser，取得目前登入的使用者資料（如果有登入的話）
-      if (user && user.name) {							// 檢查回傳的 user 是否存在，且裡面有 name 欄位（代表已登入）
-        $("#loginLink").hide();                              // 隱藏「登入」按鈕
-        $("#welcomeUser").text("歡迎您：" + user.name);		// 在頁面上顯示「歡迎您：使用者名稱」
-        $("#logoutLink").show();							// 顯示「登出」按鈕
-      }
-    });
-
-    $("#logoutLink").click(function(e) {			// 當使用者點擊「登出」連結時執行
-      e.preventDefault();							// 取消原本連結的預設行為（例如跳頁）
-      $.get("/logout", function() {					// 發送 GET 請求到 /logout，請求登出
-        window.location.href = "/index.html";		// 登出成功後，重新導向回首頁（index.html）
-      });
-    });
- // 點擊每個商品卡片，導向對應的頁面
-    $(".card").click(function() {
-    	const pid = $(this).data("pid");
-   	  window.location.href = `/api/products/detail?pid=${pid}`;
-    });
-    $(".card").click(function() {
-    	const pid = $(this).data("pid");
-    	window.location.href = `/api/products/detail?pid=${pid}`;
-    });
-    $(".card").click(function() {
-    	const pid = $(this).data("pid");
-      window.location.href = `/api/products/detail?pid=${pid}`;
-    });
-});
-</script>
 </html>

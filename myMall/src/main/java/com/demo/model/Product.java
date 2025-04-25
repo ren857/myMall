@@ -19,6 +19,7 @@ public class Product {
 		Integer price;
 		String image;
 		String size;
+		String brief;
 		
 		
 }

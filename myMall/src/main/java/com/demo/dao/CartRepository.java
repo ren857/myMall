@@ -17,8 +17,7 @@ public interface CartRepository extends JpaRepository<Cart,CartId> {
 	           "JOIN Member m ON c.id.mid = m.mid " +
 	           "JOIN Product p ON c.id.pid = p.pid " +
 	           "WHERE c.id.mid = :mid")
-	    List<CartItemDTO> findCartDetails(@Param("mid") Integer mid);
-	
+	    List<CartItemDTO> findCartDetails(@Param("mid") Integer mid);	
 	 	Optional<Cart> findById(CartId id);
 	 	List<Cart> findByIdMid(Integer mid);
 	 	void deleteById(CartId id);

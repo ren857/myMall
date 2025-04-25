@@ -28,6 +28,7 @@ CREATE TABLE `product` (
   `image` varchar(255) DEFAULT NULL,
   `pname` varchar(255) DEFAULT NULL,
   `size` varchar(255) DEFAULT NULL,
+  `brief` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +39,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,390,'M001.jpg','新世紀福音戰士S','S'),(2,390,'M001.jpg','新世紀福音戰士M','M'),(3,390,'M001.jpg','新世紀福音戰士L','L'),(4,690,'P001.jpg','Pokemon 超夢S','S'),(5,690,'P001.jpg','Pokemon 超夢M','M'),(6,690,'P001.jpg','Pokemon 超夢L','L'),(7,290,'D001.jpg','七龍珠S','S'),(8,290,'D001.jpg','七龍珠M','M'),(9,290,'D001.jpg','七龍珠L','L');
+INSERT INTO `product` VALUES (1,390,'M001.jpg','新世紀福音戰士','S','正面印有NERV標誌，背面採用EVA初號機插畫與第一集副標題設計。圖案經“磨損加工”，呈現復古風格。'),(2,390,'M001.jpg','新世紀福音戰士','M','正面印有NERV標誌，背面採用EVA初號機插畫與第一集副標題設計。圖案經“磨損加工”，呈現復古風格。'),(3,390,'M001.jpg','新世紀福音戰士','L','正面印有NERV標誌，背面採用EVA初號機插畫與第一集副標題設計。圖案經“磨損加工”，呈現復古風格。'),(4,690,'P001.jpg','寶可夢','S','寶可夢聯名，融合8-bit風格，打造復古像素潮流，快選擇你的寶可夢，踏上成為時尚大師的旅途。'),(5,690,'P001.jpg','寶可夢','M','寶可夢聯名，融合8-bit風格，打造復古像素潮流，快選擇你的寶可夢，踏上成為時尚大師的旅途。'),(6,690,'P001.jpg','寶可夢','L','寶可夢聯名，融合8-bit風格，打造復古像素潮流，快選擇你的寶可夢，踏上成為時尚大師的旅途。'),(7,290,'D001.jpg','七龍珠','S','​採用變小的孫悟空(迷你)揮舞如意棒的活力插畫印花設計。推薦搭配本系列襪款一同穿搭。​'),(8,290,'D001.jpg','七龍珠','M','​採用變小的孫悟空(迷你)揮舞如意棒的活力插畫印花設計。推薦搭配本系列襪款一同穿搭。​'),(9,290,'D001.jpg','七龍珠','L','​採用變小的孫悟空(迷你)揮舞如意棒的活力插畫印花設計。推薦搭配本系列襪款一同穿搭。​');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-22 14:35:02
+-- Dump completed on 2025-04-25 16:27:50

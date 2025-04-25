@@ -1,0 +1,45 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center; /* 水平置中 */
+    height: 100vh; /* 設定容器的高度為視窗高度 */
+    padding: 0; /* 去掉內邊距，避免影響顯示 */
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    background: black;
+    color: white;
+    padding: 10px;
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login-box {
+    width: 30%;
+    padding: 20px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #e7efff;
+    border: none;
+    border-radius: 3px;
+}

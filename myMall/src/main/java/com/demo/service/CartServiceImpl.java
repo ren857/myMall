@@ -23,7 +23,11 @@ public class CartServiceImpl implements CartService {
 	public void addToCart(Integer mid, Integer pid, Integer quantity) {
 		CartId id = new CartId(mid, pid);
 		Cart cart = new Cart(id, quantity);
+		System.out.println("mid1: "+mid);
+	    System.out.println("pid1: "+pid);
+	    System.out.println("quantity1: "+quantity);
 		cartRepository.save(cart);
+		cartRepository.flush();
 	}
 
 	@Override

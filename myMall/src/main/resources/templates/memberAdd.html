@@ -1,117 +1,34 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>新增會員</title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-	</head>
-	<style>
-	.menu-space {
-		width: 20px; /* 調整適當的間距寬度 */
-		display: inline-block;
-	}
-	</style>
-	<style>
-	body {
-		font-family: Arial, sans-serif;
-		background: #fff;
-		margin: 0;
-		padding: 0;
-	}
-	.btn {
-      display: block;
-      width: 100%;
-      background: black;
-      color: white;
-      padding: 10px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-	
-	.container {
-		display: flex;
-		justify-content: center; /* 水平置中 */
-		height: 100vh; /* 設定容器的高度為視窗高度 */
-		padding: 0; /* 去掉內邊距，避免影響顯示 */
-	}
-	
-	input[type="text"] {
-		width: 100%;
-		padding: 10px;
-		font-size: 16px;
-		background-color: #e7efff;
-		border: none;
-		border-radius: 3px;
-	}
-	
-	.login-box {
-		width: 30%;
-		padding: 20px;
-	}
-	
-	h2 {
-		font-size: 20px;
-		margin-bottom: 20px;
-	}
-	</style>
-	<body>
-		<a href="index.html"> <img src="/bg/bg001.png" style="height: 60px; margin-left: 180px;">
-		</a>
-		<div class="container">
-			<div class="login-box">
-				<h2>註冊</h2>
-				<form id="addm"  >
-					<label for="loginusername"> 帳號 ※</label> <input type="text" id="loginusername" name="loginusername" required><br>
-					<label for="loginpassword"> 密碼 ※</label> <input type="text" id="loginpassword" name="loginpassword" required><br>
-					<label for="name"> 姓名 ※</label> <input type="text" id="name" name="name" required><br>
-					<label for="phone">手機 ※</label> <input type="text" id="phone" name="phone" required><br>
-					 <button id=msg type="submit"  class="btn">註冊</button>
-				</form>
-				<script>
-					function result(data,status){
-						if(data !=="帳號重複請重新註冊"){
-							alert("註冊成功")
-							location.href="memberLogin";
-							}
-						else{
-							$("#msg").html(data);
-							}
-						}
-					function memberadd(evt){
-						evt.preventDefault();
-						const obj = {
-							      loginusername: $("#loginusername").val(),
-							      loginpassword: $("#loginpassword").val(),
-							      name: $("#name").val(),
-							      phone: $("#phone").val()
-							    };
-						if(obj.loginusername ===""|| obj.loginpassword ===""
-							|| obj.name ==="" || obj.phone ===""){
-							alert("請填所有資料");
-							return;//阻止提交
-							}
-						$.ajax({
-							url : "addMember",
-							type : "post",
-							dataType : "html",
-							contentType : 'application/json',
-							data : JSON.stringify(obj),
-							success : result,
-							error: function (err) {
-						        console.error("註冊失敗", err);
-						        alert("註冊失敗，請稍後再試");
-						      }
-						    });
-						  }
-					$("#addm").submit(memberadd);
-				</script>
-			</div>
-		</div>
-	</body>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>註冊會員</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/css/memberadd.css"> <!-- 引入外部 CSS -->
+</head>
+<body>
+    <a href="index.html"> <img src="/bg/bg001.png" style="height: 60px; margin-left: 180px;"></a>
+    
+    <div class="container">
+        <div class="login-box">
+            <h2>註冊</h2>
+            <form id="addm">
+                <label for="loginusername">帳號 ※</label> 
+                <input type="text" id="loginusername" name="loginusername" required><br>
+                <label for="loginpassword">密碼 ※</label> 
+                <input type="text" id="loginpassword" name="loginpassword" required><br>
+                <label for="name">姓名 ※</label> 
+                <input type="text" id="name" name="name" required><br>
+                <label for="phone">手機 ※</label> 
+                <input type="text" id="phone" name="phone" required><br>
+                <button id="msg" type="submit" class="btn">註冊</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="/js/memberadd.js"></script> <!-- 引入外部 JS -->
+</body>
 </html>
