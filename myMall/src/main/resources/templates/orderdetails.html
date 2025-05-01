@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>歷史訂單</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="/css/cart.css">
+<!-- 引入外部 CSS -->
+</head>
+<body>
+	<div class="top-bar">
+		<div class="logo-box">
+			<a href="/index.html"> <img src="/bg/bg001.png" alt="Logo">
+			</a> <span>myMall</span>
+		</div>
+		<div class="nav-links">
+			<a href="/memberLogin" id="loginLink">登入</a> <span id="welcomeUser"
+				style="margin-left: 20px;"></span> <a href="#" id="logoutLink"
+				style="display: none;">登出</a>
+				<a href="/api/products/shop">商品購物</a> 
+				<a href="/api/orders">我的訂單</a>
+		</div>
+	</div>
+	<div class="container">
+		<h1>訂單明細</h1>
+		<table id="order-history">
+			<thead>
+				<tr>
+					<th>商品名稱</th>
+					<th>商品價格</th>
+					<th>商品尺寸</th>
+					<th>商品數量</th>
+					<th>小計</th>
+				</tr>
+				<div class="total" id="total-amount">
+					總金額：<span id="total-money">NT$0</span>
+				</div>
+			</thead>
+			<tbody id=order-history-body>
+				<!-- 訂單資料將顯示在這裡 -->
+			</tbody>
+		</table>
+
+
+		<script>
+		
+		
+    $(document).ready(function() {
+    	 const name = localStorage.getItem("name")
+     	$.ajax({
+     		url: "/currentUser",  // 發送登入請求到後端
+     		method: "GET",
+     		headers: {
+     			"Authorization": "Bearer " + localStorage.getItem("token")
+     		},
+     		success: function(response) {
+     			$("#loginLink").hide();  // 隱藏登入連結
+     			$("#welcomeUser").text("歡迎您：" + name);  // 顯示使用者名稱
+     			$("#logoutLink").show();  // 顯示登出連結
+     		}
+     	});
+
+     	// 登出操作
+     	$("#logoutLink").click(function(e) {
+     		e.preventDefault();
+     		localStorage.removeItem("token");  // 移除 Token
+     		window.location.href = "/index.html";  // 跳轉到首頁
+     	});
+     	
+        const token = localStorage.getItem("token");
+        const urlParams = new URLSearchParams(window.location.search);
+		const oid = urlParams.get('oid');
+		console.log(oid);
+
+        if (!token) {
+            alert("請先登入！");
+            window.location.href = "/memberLogin";  // 跳轉到登入頁面
+            return;
+        }
+
+        $.ajax({
+            url: `/api/orders/details/${oid}`,  // 查詢歷史訂單的 API
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            success: function(orderHistory) {
+                console.log(orderHistory);
+                renderOrderHistory(orderHistory);  // 渲染訂單
+            },
+            error: function() {
+                console.error("查詢訂單失敗");
+                alert("查詢訂單失敗");
+            }
+        });
+   	
+      function renderOrderHistory(orderHistory) {
+            const orderBody = document.getElementById("order-history-body");
+            let total=0;
+            orderHistory.forEach(order => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    
+                    <td>${order.pname}</td>
+				    <td>${order.price}</td>
+                    <td>${order.size}</td>
+                    <td>${order.quantity}</td>
+                    <td>${order.quantity * order.price}</td>
+                 
+                `;
+                total+=order.quantity * order.price
+               	console.log("total"+total);
+                orderBody.appendChild(row);     
+            });
+            document.getElementById("total-money").innerText = `NT ${total}`;
+        }       
+        
+    });
+       </script>
+	</div>
+</body>
+</html>

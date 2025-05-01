@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	const name = localStorage.getItem("name")
 	$.ajax({
 		url: "/currentUser",  // 發送登入請求到後端
 		method: "GET",
@@ -7,9 +8,8 @@ $(document).ready(function() {
 		},
 		success: function(response) {
 			$("#loginLink").hide();  // 隱藏登入連結
-			$("#welcomeUser").text("歡迎您：" + localStorage.getItem("name"));  // 顯示使用者名稱
+			$("#welcomeUser").text("歡迎您：" + name);  // 顯示使用者名稱
 			$("#logoutLink").show();  // 顯示登出連結
-
 		}
 	});
 
@@ -20,34 +20,18 @@ $(document).ready(function() {
 		window.location.href = "/index.html";  // 跳轉到首頁
 	});
 
-
-
-
-
-	// 確保後端返回的數據能夠正確渲染
-	$.ajax({
-		url: "http://localhost:8080/api/cart",
-		method: "GET",
-		headers: {
-			"Authorization": "Bearer " + localStorage.getItem("token")
-		},
-		success: function(cartObject) {
-			console.log(cartObject);
-			if (cartObject.length === 0) {
-				alert("購物車內沒有商品！");
-			}
-
-			// 將購物車數據保存至 localStorage
-			localStorage.setItem("cartItems", JSON.stringify(cartObject));
-
-			// 渲染購物車
-			renderCart(cartObject);
-		},
-		error: function() {
-			console.error("獲取購物車資料出錯:");
-			alert("獲取購物車資料失敗");
-		}
-	});
+	let cart = JSON.parse(localStorage.getItem("cart"))
+	console.log("購物車cart: ", cart);
+	let cartData = [];
+	if (cart) {
+		cartData = cart.filter(item => item.membername === name);
+	}
+	console.log("name名子:" + cartData)
+	if (cartData) {
+		renderCart(cartData);  // 把找到的 cartData 作為陣列傳遞給 renderCart 函數
+	} else {
+		console.log("沒有找到 name 的購物車資料");
+	}
 
 	// 渲染購物車的函數
 	function renderCart(cartItems) {
@@ -63,7 +47,7 @@ $(document).ready(function() {
 			const row = document.createElement("tr");
 			row.innerHTML = `
                 <td>
-                    <img src="/image/${item.image}" alt="商品圖片" width="150">
+                    <img src="${item.image}" alt="商品圖片" width="150">
                     <p>${item.pname}</p>
                 </td>
                 <td>尺寸：${item.size}</td>               
@@ -84,90 +68,79 @@ $(document).ready(function() {
 		});
 
 		// 更新總金額
-		//document.getElementById("total-amount").innerHTML = `總金額：<span style="color:red">NT$ ${total}</span>`;
 		document.getElementById("total-money").innerText = `NT ${total}`;
 	}
 
 	// 數量變動的函數
 	window.changeQuantity = function(index, delta) {
-		const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-
-
+		const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+		console.log("quantity" + cartItems[index].quantity);
 		// 更新數量，並防止小於 1
-		cartItems[index].quantity += delta;
-		if (cartItems[index].quantity < 1) cartItems[index].quantity = 1;
-
+		let currentQuantity = parseInt(cartItems[index].quantity);
+		currentQuantity += delta;
+		if (currentQuantity < 1) currentQuantity = 1;
+		cartItems[index].quantity = currentQuantity;
 		// 更新顯示的數量
-		document.getElementById(`quantity-${index}`).innerText = cartItems[index].quantity;
+		document.getElementById(`quantity-${index}`).innerText = currentQuantity;
 
 		// 更新本地存儲的 cartItems
-		localStorage.setItem("cartItems", JSON.stringify(cartItems));
-
+		localStorage.setItem("cart", JSON.stringify(cartItems));
+		console.log("currentQuantity:" + currentQuantity)
 		// 渲染購物車
 		renderCart(cartItems);
-
 	}
 
 	// 刪除商品
 	window.removeItem = function(index) {
-		const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-		const token = localStorage.getItem("token");
-		console.log("Updated cartItems in localStorage:", localStorage.getItem("cartItems"));
-		// 刪除指定索引的商品
+		// 讀取購物車數據
+		const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
-		removeObj=cartItems.splice(index, 1);
-		console.log("removeObj",removeObj);
-		localStorage.setItem("cartItems", JSON.stringify(cartItems));  // 保存更新後的 cartItems
-		console.log("Updated cartItems in localStorage2:", localStorage.getItem("cartItems"));
-		console.log("removeObj2",removeObj[0]);
-		$.ajax({
-					url: "http://localhost:8080/api/remove",
-					method: "Delete",
-					headers: {
-						"Authorization": "Bearer " + token
-					},
-					contentType: "application/json",
-					data: JSON.stringify(removeObj[0]),
-					success: function(respData) {
-						alert(respData);
-					},
-					error: function() {
-						console.error("獲取購物車資料出錯:");
-						alert(respData);
-					}
-				});
-		renderCart(cartItems); // 更新渲染
+		// 刪除指定索引的商品
+		cartItems.splice(index, 1);  // splice 用來刪除數組中的項目
+
+		// 保存更新後的 cartItems 到 localStorage
+		localStorage.setItem("cart", JSON.stringify(cartItems));
+
+		// 重新渲染購物車
+		renderCart(cartItems);
 	}
 
-	// 結帳操作
 	$("#addToCartForm").submit(function(e) {
 		e.preventDefault();  // 防止表單默認提交
-		const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-		console.log("Updated cartItems in localStorage3:", localStorage.getItem("cartItems"));
+
+		const cartItems = JSON.parse(localStorage.getItem("cart"));
 		const token = localStorage.getItem("token");
+		const userName = localStorage.getItem("name");
+		const userCart = cartItems.filter(item => item.membername === userName);
+		console.log("cartItems01:  ", cartItems);
 		if (!token) {
 			alert("請先登入！");
 			window.location.href = "/memberLogin";  // 跳轉到登入頁面
 			return;
 		}
+		console.log("userCart00:", userCart);
 
+		// 發送訂單請求
 		$.ajax({
-			url: "http://localhost:8080/api/updateQuantity",
+			url: "/api/orders/submitOrder",  // 提交訂單的後端接口
 			method: "POST",
 			headers: {
 				"Authorization": "Bearer " + token
 			},
 			contentType: "application/json",
-			data: JSON.stringify(cartItems),
-			success: function(respData) {
-				alert(respData);
+			data: JSON.stringify(userCart),  // 將訂單資料發送到後端
+			success: function(response) {
+				const updatedCart = cartItems.filter(item => item.membername !== userName);
+				localStorage.setItem("cart", JSON.stringify(updatedCart));				
+				alert("訂單已成功創建！");
+				window.location.href = "/api/orders";  // 跳轉到訂單頁面
+				console.log("userCart:", userCart)
 			},
-			error: function() {
-				console.error("獲取購物車資料出錯:");
-				alert(respData);
+			error: function(error) {
+				console.error("創建訂單失敗:", error);
+				alert("創建訂單失敗");
 			}
 		});
 
 	});
-
 });

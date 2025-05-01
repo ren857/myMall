@@ -16,29 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Temporary view structure for view `view1`
+-- Temporary view structure for view `details`
 --
 
-DROP TABLE IF EXISTS `view1`;
-/*!50001 DROP VIEW IF EXISTS `view1`*/;
+DROP TABLE IF EXISTS `details`;
+/*!50001 DROP VIEW IF EXISTS `details`*/;
 SET @saved_cs_client     = @@character_set_client;
 /*!50503 SET character_set_client = utf8mb4 */;
-/*!50001 CREATE VIEW `view1` AS SELECT 
- 1 AS `mid`,
+/*!50001 CREATE VIEW `details` AS SELECT 
+ 1 AS `oid`,
+ 1 AS `quantity`,
  1 AS `pid`,
- 1 AS `loginusername`,
- 1 AS `member_name`,
- 1 AS `pname`,
  1 AS `price`,
- 1 AS `size`,
- 1 AS `image`*/;
+ 1 AS `pname`,
+ 1 AS `size`*/;
 SET character_set_client = @saved_cs_client;
 
 --
--- Final view structure for view `view1`
+-- Final view structure for view `details`
 --
 
-/*!50001 DROP VIEW IF EXISTS `view1`*/;
+/*!50001 DROP VIEW IF EXISTS `details`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
@@ -47,7 +45,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `view1` AS select `cart`.`mid` AS `mid`,`cart`.`pid` AS `pid`,`member`.`loginusername` AS `loginusername`,`member`.`name` AS `member_name`,`product`.`pname` AS `pname`,`product`.`price` AS `price`,`product`.`size` AS `size`,`product`.`image` AS `image` from ((`cart` join `member` on((`cart`.`mid` = `member`.`mid`))) join `product` on((`cart`.`pid` = `product`.`pid`))) */;
+/*!50001 VIEW `details` AS select `od`.`oid` AS `oid`,`od`.`quantity` AS `quantity`,`p`.`pid` AS `pid`,`p`.`price` AS `price`,`p`.`pname` AS `pname`,`p`.`size` AS `size` from (`orderdetails` `od` join `product` `p` on((`p`.`pid` = `od`.`pid`))) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -61,4 +59,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-24 10:25:26
+-- Dump completed on 2025-05-02  0:41:59

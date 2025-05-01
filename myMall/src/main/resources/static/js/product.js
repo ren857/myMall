@@ -1,11 +1,12 @@
 $(document).ready(function() {
 
-
+	
 	// 從網址取得 pid，例如 http://localhost:8080/product-detail.html?pid=3
 	const urlParams = new URLSearchParams(window.location.search);
 	const pid = urlParams.get('pid');
 	console.log(pid);
-	var mypname;
+	let mypname;
+	
 	if (pid) {
 		$.get(`/api/products/${pid}`, function(product) {
 			$("#product-name").text(product.pname);
@@ -13,6 +14,7 @@ $(document).ready(function() {
 			$("#product-price").text("價格：NT$" + product.price);
 			$("#size").text("尺寸：" + product.size);
 			localStorage.setItem("pid", product.pid);
+			
 		mypname=product.pname;
 		console.log("mypname:", mypname);
 		$.ajax({
@@ -40,60 +42,7 @@ $(document).ready(function() {
 		$("#product-name").text("未提供商品 pid");
 		$("#product-image").hide();
 	}
-	
-	/*(async function fetchProductData() {
-	  // 從網址取得 pid，例如 http://localhost:8080/product-detail.html?pid=3
-	  const urlParams = new URLSearchParams(window.location.search);
-	  const pid = urlParams.get('pid');
-	  let mypname; // 初始化 mypname 變數
 
-	  if (pid) {
-	    try {
-	      // 使用 await 等待第一個 AJAX 請求完成
-	      const product = await $.get(`/api/products/${pid}`);
-	      // 更新網頁內容
-	      $("#product-name").text(product.pname);
-	      $("#product-image").attr("src", "/image/" + product.image);
-	      $("#product-price").text("價格：NT$" + product.price);
-	      $("#size").text("尺寸：" + product.size);
-	      $("#product-brief").text(product.brief);
-
-	      // 動態生成數量選項
-	      for (let i = 1; i <= 50; i++) {
-	        $("#quantity").append(new Option(i, i)); // 動態增加數量選項
-	      }
-
-	      // 設置 mypname 值
-	      mypname = product.pname;
-	      console.log("mypname:", mypname);
-
-	      // 使用 mypname 進行第二個 AJAX 請求
-	      if (mypname) {
-	        const productList = await $.get(`http://localhost:8080/api/products/productlist/${mypname}`);
-	        console.log("product list:", productList);
-	        productList.forEach(item => {
-	          $("#size").append(`<option value="${item.size}"data-pid="${item.pid}">${item.size}</option>`);
-	          console.log("size:", item.size);
-			  console.log("item",item);
-			  console.log("pid",item.pid);
-	        });
-	      }
-	    } catch (error) {
-	      // 處理錯誤情況
-	      console.error("錯誤發生:", error);
-	      $("#product-name").text(pid ? "找不到商品" : "未提供商品 pid");
-	      $("#product-image").hide();
-	      $("#product-price").text("");
-	      $("#size").text("");
-	    }
-	  } else {
-	    // 如果未提供 pid
-	    $("#product-name").text("未提供商品 pid");
-	    $("#product-image").hide();
-	  }
-	})();
-	*/
-	
 	$("#size").change(function() {
 	    const selectedSize = $(this).val();  // 獲取選中的 size
 	    const selectedOption = $(this).find("option:selected");  // 獲取選中的 option
@@ -108,7 +57,7 @@ $(document).ready(function() {
 
 	// 登入後顯示用戶資訊
 	const token = localStorage.getItem("token");
-
+	const name =localStorage.getItem("name");
 	if (token) {
 		$.ajax({
 			url: "/currentUser",
@@ -118,7 +67,7 @@ $(document).ready(function() {
 			},
 			success: function(response) {
 				$("#loginLink").hide();
-				$("#welcomeUser").text("歡迎您：" + localStorage.getItem("name"));
+				$("#welcomeUser").text("歡迎您：" +name);
 				$("#logoutLink").show();
 			}
 		});
@@ -132,7 +81,7 @@ $(document).ready(function() {
 	});
 
 	// 加入購物車表單提交
-	$("#addToCartForm").submit(function(e) {
+	/*$("#addToCartForm").submit(function(e) {
 		e.preventDefault(); // 防止表單的默認提交
 
 		// 檢查用戶是否登入
@@ -182,5 +131,44 @@ $(document).ready(function() {
 			alert("請先登入！");
 			window.location.href = "/memberLogin";  // 跳轉到登入頁面
 		}
-	});
+	});*/
+	$("#addToCartForm").submit(function(e) {
+	       e.preventDefault();  // 防止表單的默認提交
+	
+	       // 檢查用戶是否登入
+	       const token = localStorage.getItem("token");
+		   const membername=localStorage.getItem("name");
+		   console.log("membername名子"+membername);
+	       const pid = localStorage.getItem("pid");
+	       const pname = $("#product-name").text();
+	       const size = $("#size").val();
+	       const image = $("#product-image").attr("src");
+	       const price = $("#product-price").text().replace("價格：NT$", "").trim(); // 獲取價格
+	       const quantity = $("#quantity").val(); // 取得商品的數量
+		  
+	       // 儲存資料到 localStorage
+	       const cartItem = {
+	           membername:membername, // 用戶名稱
+	           pid: pid,  // 商品 ID
+	           pname: pname,  // 商品名稱
+	           size: size,  // 尺寸
+	           image: image,  // 商品圖片
+	           price: price,  // 商品價格
+	           quantity: quantity  // 商品數量
+	       };
+		   
+	      let cart = JSON.parse(localStorage.getItem("cart")) || [];  // 讀取購物車資料，若沒有則初始化為空數組
+		   const existingProductIndex = cart.findIndex(item => item.pid === pid && item.membername === membername);
+		          if (existingProductIndex !== -1) {
+		              // 如果該商品已存在，更新數量
+		              cart[existingProductIndex].quantity = parseInt(cart[existingProductIndex].quantity) + parseInt(quantity);
+		          } else {
+		              // 如果商品不存在，將商品加入購物車
+		              cart.push(cartItem);
+		          }
+	       localStorage.setItem("cart", JSON.stringify(cart));  // 保存購物車到 localStorage
+			console.log("購物車cart"+JSON.stringify(cart));
+			//localStorage.clear("cart");
+	       alert(`${pname} 已加入購物車！`);
+	   });
 });

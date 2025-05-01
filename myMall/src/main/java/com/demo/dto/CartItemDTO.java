@@ -7,14 +7,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class CartItemDTO {
+    private Integer pid;
+    private Integer quantity;
+    private Integer price;
+    private String pname;
+    private String size;
 
-	private String pname;
-	private Integer price;
-	private String size;
-	private String image;
-	private String memberName ;
-	private Integer pid;
-	private Integer quantity;
 
+   
 }
