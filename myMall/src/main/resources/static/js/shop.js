@@ -43,7 +43,8 @@ $(document).ready(function() {
 	$("#logoutLink").click(function(e) {
 		e.preventDefault();
 		localStorage.removeItem("token");  // 移除 Token
-		window.location.href = "/index.html";  // 跳轉到首頁
+		localStorage.removeItem("name");
+		window.location.href = "/memberLogin";  // 跳轉到首頁
 	});
 
 });

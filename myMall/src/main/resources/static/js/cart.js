@@ -12,14 +12,15 @@ $(document).ready(function() {
 			$("#logoutLink").show();  // 顯示登出連結
 		}
 	});
-
+	
 	// 登出操作
 	$("#logoutLink").click(function(e) {
 		e.preventDefault();
 		localStorage.removeItem("token");  // 移除 Token
-		window.location.href = "/index.html";  // 跳轉到首頁
+		localStorage.removeItem("name");
+		window.location.href = "/memberLogin";  // 跳轉到首頁
 	});
-
+	let token =localStorage.getItem("token")
 	let cart = JSON.parse(localStorage.getItem("cart"))
 	console.log("購物車cart: ", cart);
 	let cartData = [];
@@ -39,6 +40,7 @@ $(document).ready(function() {
 		const cartBody = document.getElementById("cart-body");
 		cartBody.innerHTML = ''; // 清空之前的内容
 
+		if(token){
 		cartItems.forEach((item, index) => {
 			const subtotal = item.price * item.quantity; // 小計
 			total += subtotal;
@@ -66,6 +68,10 @@ $(document).ready(function() {
             `;
 			cartBody.appendChild(row);
 		});
+	}else{
+		alert("請先登入");
+		window.location.href = "/memberLogin";
+	}
 
 		// 更新總金額
 		document.getElementById("total-money").innerText = `NT ${total}`;
